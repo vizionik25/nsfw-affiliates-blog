@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="HandheldFriendly" content="True">
+    <title>{{meta_title}}</title>
+    <meta name="description" content="{{meta_description}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{asset "css/style.css"}}">
+    {{ghost_head}}
+    {{> seo-meta}}
+</head>
+<body class="{{body_class}} no-scroll">
+    {{> age-gate}}
+    <div class="ad-slot ad-slot--header" aria-hidden="true"></div>
+    {{> navbar}}
+    <main id="main-content" role="main">
+        {{{body}}}
+    </main>
+    <div class="ad-slot ad-slot--footer" aria-hidden="true"></div>
+    {{> footer}}
+    <script src="{{asset "js/main.js"}}"></script>
+    {{ghost_foot}}
+</body>
+</html>

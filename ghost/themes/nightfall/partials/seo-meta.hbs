@@ -1,0 +1,66 @@
+{{!-- JSON-LD Structured Data --}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "{{@site.title}}",
+  "url": "{{@site.url}}"
+  {{#if @site.logo}},"logo": "{{@site.logo}}"{{/if}}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{@site.title}}",
+  "url": "{{@site.url}}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{@site.url}}/?s={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "{{@site.url}}"}
+    {{#is "post"}}
+    {{#if primary_tag}}
+    ,{"@type": "ListItem", "position": 2, "name": "{{primary_tag.name}}", "item": "{{primary_tag.url}}"}
+    ,{"@type": "ListItem", "position": 3, "name": "{{title}}", "item": "{{url}}"}
+    {{else}}
+    ,{"@type": "ListItem", "position": 2, "name": "{{title}}", "item": "{{url}}"}
+    {{/if}}
+    {{/is}}
+    {{#is "tag"}}
+    ,{"@type": "ListItem", "position": 2, "name": "{{name}}", "item": "{{url}}"}
+    {{/is}}
+    {{#is "page"}}
+    ,{"@type": "ListItem", "position": 2, "name": "{{title}}", "item": "{{url}}"}
+    {{/is}}
+  ]
+}
+</script>
+{{#is "post"}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "{{url}}"},
+  "headline": "{{title}}",
+  {{#if feature_image}}"image": "{{feature_image}}",{{/if}}
+  "datePublished": "{{date format="YYYY-MM-DDTHH:mm:ssZ"}}",
+  "dateModified": "{{updated_at format="YYYY-MM-DDTHH:mm:ssZ"}}",
+  "author": {"@type": "Person", "name": "{{primary_author.name}}"},
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{@site.title}}"
+    {{#if @site.logo}},"logo": {"@type": "ImageObject", "url": "{{@site.logo}}"}{{/if}}
+  },
+  "description": "{{excerpt}}"
+}
+</script>
+{{/is}}

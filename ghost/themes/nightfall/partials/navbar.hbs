@@ -1,0 +1,25 @@
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="navbar__inner">
+    <a href="{{@site.url}}" class="navbar__logo" aria-label="{{@site.title}} — Home">
+      {{#if @site.logo}}
+        <img src="{{@site.logo}}" alt="{{@site.title}}" style="height: 36px; width: auto;">
+      {{else}}
+        <span class="text-gradient">{{@site.title}}</span>
+      {{/if}}
+    </a>
+    <div class="navbar__links" role="menubar">
+      {{#foreach navigation}}
+        <a href="{{url}}" role="menuitem" {{#if current}}aria-current="page"{{/if}}>{{label}}</a>
+      {{/foreach}}
+    </div>
+    <button class="navbar__toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-drawer" id="mobile-drawer" role="dialog" aria-label="Mobile navigation">
+  {{#foreach navigation}}
+    <a href="{{url}}" {{#if current}}aria-current="page"{{/if}}>{{label}}</a>
+  {{/foreach}}
+</div>
+<div class="drawer-backdrop" aria-hidden="true"></div>

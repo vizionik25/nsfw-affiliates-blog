@@ -1,0 +1,21 @@
+<article class="post-card reveal-on-scroll">
+  {{#if feature_image}}
+    <div class="post-card__image">
+      <a href="{{url}}" aria-label="Read: {{title}}">
+        <img srcset="{{img_url feature_image size="s"}} 300w, {{img_url feature_image size="m"}} 600w, {{img_url feature_image size="l"}} 1000w" sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw" src="{{img_url feature_image size="m"}}" alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}" loading="lazy">
+      </a>
+    </div>
+  {{else}}
+    <div class="post-card__image"><a href="{{url}}" aria-label="Read: {{title}}"></a></div>
+  {{/if}}
+  <div class="post-card__content">
+    {{#if primary_tag}}<div class="post-card__tag"><a href="{{primary_tag.url}}" class="badge">{{primary_tag.name}}</a></div>{{/if}}
+    <h3 class="post-card__title"><a href="{{url}}">{{title}}</a></h3>
+    {{#if custom_excerpt}}<p class="post-card__excerpt">{{custom_excerpt}}</p>{{else}}<p class="post-card__excerpt">{{excerpt words="25"}}</p>{{/if}}
+    <div class="post-card__meta">
+      {{#if primary_author.profile_image}}<img src="{{img_url primary_author.profile_image size="xs"}}" alt="{{primary_author.name}}" loading="lazy">{{/if}}
+      <span>{{primary_author.name}}</span><span>·</span>
+      <time datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM D, YYYY"}}</time>
+    </div>
+  </div>
+</article>
