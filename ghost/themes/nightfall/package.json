@@ -7,8 +7,12 @@
   },
   "license": "MIT",
   "author": {
-    "name": "Nightfall Theme"
+    "name": "Nightfall Theme",
+    "email": "theme-support@yourdomain.com"
   },
+  "keywords": [
+    "ghost-theme"
+  ],
   "config": {
     "posts_per_page": 12,
     "image_sizes": {

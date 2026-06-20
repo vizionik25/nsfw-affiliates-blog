@@ -1447,6 +1447,34 @@ p {
   border-radius: 0;
 }
 
+/* Ghost Card CSS Gallery and Bookmark classes */
+.post-content .kg-gallery-container {
+  display: flex;
+  flex-direction: column;
+  margin: var(--space-xl) 0;
+}
+
+.post-content .kg-gallery-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.post-content .kg-gallery-image img {
+  display: block;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.post-content .kg-bookmark-author {
+  font-weight: 500;
+}
+
+.post-content .kg-bookmark-publisher {
+  opacity: 0.8;
+}
+
 /* --------------------------------------------------------------------------
    5.18 Author Bio
    -------------------------------------------------------------------------- */
