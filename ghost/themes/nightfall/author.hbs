@@ -1,5 +1,6 @@
 {{!< default}}
 
+{{#author}}
 <header class="author-header">
     <div class="container">
         {{#if profile_image}}
@@ -16,14 +17,15 @@
             <a class="author-header__website" href="{{website}}" target="_blank" rel="noopener noreferrer">{{website}}</a>
         {{/if}}
         {{#if twitter}}
-            <a href="https://twitter.com/{{twitter}}" class="btn btn--secondary" target="_blank" rel="noopener">Twitter</a>
+            <a href="{{twitter}}" class="btn btn--secondary" target="_blank" rel="noopener">Twitter</a>
         {{/if}}
         {{#if facebook}}
-            <a href="https://facebook.com/{{facebook}}" class="btn btn--secondary" target="_blank" rel="noopener">Facebook</a>
+            <a href="{{facebook}}" class="btn btn--secondary" target="_blank" rel="noopener">Facebook</a>
         {{/if}}
-        <div class="tag-header__count">{{plural ../pagination.total empty="No posts" singular="% post" plural="% posts"}}</div>
+        <div class="author-header__count">{{plural ../pagination.total empty="No posts" singular="% post" plural="% posts"}}</div>
     </div>
 </header>
+{{/author}}
 
 <section class="section">
     <div class="container">
