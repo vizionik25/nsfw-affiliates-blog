@@ -1,0 +1,113 @@
+{{!< default}}
+
+{{#post}}
+
+{{!-- Post Header --}}
+<header class="post-header">
+    <div class="container">
+        {{#if primary_tag}}
+            <a class="post-header__tag badge" href="{{primary_tag.url}}">{{primary_tag.name}}</a>
+        {{/if}}
+
+        <h1 class="post-header__title">{{title}}</h1>
+
+        <div class="post-header__meta">
+            {{#if primary_author}}
+                <a href="{{primary_author.url}}">{{primary_author.name}}</a>
+            {{/if}}
+            <time datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMMM D, YYYY"}}</time>
+            <span>{{reading_time}} min read</span>
+        </div>
+
+        {{#if feature_image}}
+            <figure class="post-header__image">
+                <img src="{{feature_image}}" alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}" />
+                {{#if feature_image_caption}}
+                    <figcaption>{{feature_image_caption}}</figcaption>
+                {{/if}}
+            </figure>
+        {{/if}}
+    </div>
+</header>
+
+{{!-- Two-Column Layout --}}
+<div class="container">
+    <div class="post-layout">
+
+        {{!-- Main Content --}}
+        <article class="post-content">
+            {{content}}
+
+            {{!-- Affiliate CTA --}}
+            {{> affiliate-cta}}
+
+            {{!-- Author Bio --}}
+            {{#if primary_author}}
+                <div class="author-bio">
+                    {{#if primary_author.profile_image}}
+                        <img class="author-bio__avatar" src="{{primary_author.profile_image}}" alt="{{primary_author.name}}" />
+                    {{/if}}
+                    <div>
+                        <h4 class="author-bio__name">
+                            <a href="{{primary_author.url}}">{{primary_author.name}}</a>
+                        </h4>
+                        {{#if primary_author.bio}}
+                            <p class="author-bio__text">{{primary_author.bio}}</p>
+                        {{/if}}
+                        <div class="footer__social">
+                            {{#if primary_author.website}}<a href="{{primary_author.website}}" target="_blank" rel="noopener">Website</a>{{/if}}
+                            {{#if primary_author.twitter}}<a href="https://twitter.com/{{primary_author.twitter}}" target="_blank" rel="noopener">Twitter</a>{{/if}}
+                            {{#if primary_author.facebook}}<a href="https://facebook.com/{{primary_author.facebook}}" target="_blank" rel="noopener">Facebook</a>{{/if}}
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+
+            {{!-- Related Posts --}}
+            {{#get "posts" filter="tags:[{{#foreach tags}}{{slug}}{{#unless @last}},{{/unless}}{{/foreach}}]+id:-{{id}}" limit="3"}}
+                {{#if posts.length}}
+                    <section class="section">
+                        <h3>Related Articles</h3>
+                        <div class="grid grid--posts">
+                            {{#foreach posts}}
+                                {{> post-card}}
+                            {{/foreach}}
+                        </div>
+                    </section>
+                {{/if}}
+            {{/get}}
+        </article>
+
+        {{!-- Sidebar --}}
+        <aside class="sidebar">
+            {{!-- Newsletter --}}
+            <div class="sidebar__section">
+                {{> newsletter-form}}
+            </div>
+
+            {{!-- Ad Slot --}}
+            <div class="sidebar__section">
+                <div class="ad-slot ad-slot--sidebar"></div>
+            </div>
+
+            {{!-- Popular Posts --}}
+            {{#get "posts" filter="tag:hash-popular" limit="5"}}
+                {{#if posts.length}}
+                    <div class="sidebar__section">
+                        <h4 class="sidebar__heading">Popular Posts</h4>
+                        <ul class="sidebar__popular-list">
+                            {{#foreach posts}}
+                                <li class="sidebar__popular-item">
+                                    <a href="{{url}}">{{title}}</a>
+                                </li>
+                            {{/foreach}}
+                        </ul>
+                    </div>
+                {{/if}}
+            {{/get}}
+        </aside>
+
+    </div>
+</div>
+
+{{/post}}

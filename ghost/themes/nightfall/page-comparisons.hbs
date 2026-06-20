@@ -1,0 +1,106 @@
+{{!< default}}
+{{!-- Custom template: Comparisons --}}
+
+<header class="post-header">
+    <div class="container">
+        <h1 class="post-header__title">
+            <span class="text-gradient">{{title}}</span>
+        </h1>
+
+        {{#if custom_excerpt}}
+            <p class="post-header__subtitle">{{custom_excerpt}}</p>
+        {{/if}}
+    </div>
+</header>
+
+<div class="container">
+    <article class="post-content">
+        {{!--
+            Comparison tables are created via Ghost HTML cards using the
+            .comparison-table markup. Editors should use this structure:
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="rank-cell">Rank</th>
+                            <th class="name-cell">Name</th>
+                            <th class="rating-cell">Rating</th>
+                            <th>Key Feature</th>
+                            <th>Price</th>
+                            <th>CTA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="rank-cell">1</td>
+                            <td class="name-cell">
+                                <a href="#review-product-a">Product A</a>
+                            </td>
+                            <td class="rating-cell">
+                                <div class="stars">⭐⭐⭐⭐⭐</div>
+                            </td>
+                            <td>Best for Privacy</td>
+                            <td>$9.99/mo</td>
+                            <td>
+                                <a href="https://example.com/affiliate" class="btn btn--primary btn--small" target="_blank" rel="noopener">Visit Site</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="rank-cell">2</td>
+                            <td class="name-cell">
+                                <a href="#review-product-b">Product B</a>
+                            </td>
+                            <td class="rating-cell">
+                                <div class="stars">⭐⭐⭐⭐☆</div>
+                            </td>
+                            <td>Best Value</td>
+                            <td>Free / $4.99/mo</td>
+                            <td>
+                                <a href="https://example.com/affiliate" class="btn btn--primary btn--small" target="_blank" rel="noopener">Visit Site</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            Note: For a fully integrated user experience, each product's name should link via
+            an anchor tag (e.g. href="#review-product-a") to its respective detailed review section
+            implemented further down in the content (e.g. <section id="review-product-a">...</section>).
+        --}}
+
+        {{content}}
+    </article>
+</div>
+
+{{!-- Newsletter signup section --}}
+<section class="newsletter-section">
+    <div class="container container--narrow">
+        <div class="newsletter-card">
+            <h2 class="newsletter-card__title">Stay Updated</h2>
+            <p class="newsletter-card__description">Get the latest comparisons and reviews delivered to your inbox.</p>
+
+            <form class="newsletter-form" data-members-form="subscribe">
+                <div class="newsletter-form__group">
+                    <input
+                        class="newsletter-form__input"
+                        type="email"
+                        name="email"
+                        placeholder="your@email.com"
+                        required
+                        data-members-email
+                    />
+                    <button class="btn btn--primary newsletter-form__button" type="submit">
+                        Subscribe
+                    </button>
+                </div>
+                <div class="newsletter-form__message newsletter-form__message--success" data-members-success>
+                    Thanks! Check your inbox for a confirmation email.
+                </div>
+                <div class="newsletter-form__message newsletter-form__message--error" data-members-error>
+                    Something went wrong. Please try again.
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

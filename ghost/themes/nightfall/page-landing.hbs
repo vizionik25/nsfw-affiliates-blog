@@ -1,0 +1,83 @@
+{{!< default}}
+{{!-- Custom template: Landing Page --}}
+
+<section class="landing-hero">
+    <div class="container">
+        <h1 class="hero__title">
+            <span class="text-gradient">{{title}}</span>
+        </h1>
+
+        {{#if custom_excerpt}}
+            <p class="hero__subtitle">{{custom_excerpt}}</p>
+        {{/if}}
+
+        {{#if feature_image}}
+            <figure class="hero__image">
+                <img src="{{feature_image}}" alt="{{title}}" loading="eager" />
+            </figure>
+        {{/if}}
+    </div>
+</section>
+
+<div class="container container--narrow">
+    <article class="post-content">
+        {{content}}
+    </article>
+
+    {{!--
+        Note: The following sections (feature list, pros/cons) should be created by authors
+        in the Ghost Editor using an HTML card with these CSS class structures:
+
+        <!-- Feature list: paste in Ghost HTML card -->
+        <div class="landing-features">
+          <div class="landing-feature">
+            <div class="landing-feature__icon">🔒</div>
+            <div>
+              <div class="landing-feature__title">Feature Name</div>
+              <p class="landing-feature__text">Description</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pros/Cons: paste in Ghost HTML card -->
+        <div class="pros-cons">
+          <div class="pros-cons__col pros"><h3>✅ Pros</h3><ul><li>Pro item</li></ul></div>
+          <div class="pros-cons__col cons"><h3>❌ Cons</h3><ul><li>Con item</li></ul></div>
+        </div>
+    --}}
+
+    {{!-- Full-width CTA button with glow pulse animation --}}
+    <div class="landing-cta">
+        <a href="#"
+           class="btn btn--primary btn--large btn--full"
+           style="animation: glowPulse 2s ease-in-out infinite;"
+        >
+            Get Started Now
+        </a>
+    </div>
+
+    <section class="section text-center reveal-on-scroll">
+      <p class="text-muted">🔒 Secure & Discreet · 💳 Trusted Billing · ⭐ 10,000+ Reviews</p>
+    </section>
+</div>
+
+<section class="faq-section">
+    <div class="container container--narrow">
+        <h2 class="faq-section__title">Frequently Asked Questions</h2>
+
+        {{!--
+            FAQ items are created by authors using Ghost HTML cards.
+            Each FAQ item should use the <details> and <summary> HTML elements:
+
+            <details class="faq-item">
+                <summary class="faq-item__question">Your question here?</summary>
+                <div class="faq-item__answer">
+                    <p>Your answer here.</p>
+                </div>
+            </details>
+
+            Authors can add as many FAQ items as needed by inserting
+            additional HTML cards in the Ghost editor.
+        --}}
+    </div>
+</section>

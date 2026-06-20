@@ -1,0 +1,112 @@
+{{!< default}}
+
+{{!-- Hero Section --}}
+<section class="hero">
+    <div class="container">
+        <div class="hero__content">
+            <h1 class="hero__title"><span class="text-gradient">Explore. Discover. Indulge.</span></h1>
+            <p class="hero__subtitle">{{@site.description}}</p>
+            <a href="#latest" class="btn btn--primary btn--large">Start Reading</a>
+        </div>
+    </div>
+</section>
+
+{{!-- Featured Posts --}}
+<section class="section">
+    <div class="container">
+        <h2>Featured</h2>
+        {{#get "posts" filter="featured:true" limit="3"}}
+            <div class="grid grid--posts">
+                {{#foreach posts}}
+                    {{> post-card}}
+                {{/foreach}}
+            </div>
+        {{/get}}
+    </div>
+</section>
+
+{{!-- Latest Articles --}}
+<section class="section" id="latest">
+    <div class="container">
+        <h2>Latest Articles</h2>
+        <div class="grid grid--posts">
+            {{#foreach posts}}
+                {{> post-card}}
+            {{/foreach}}
+        </div>
+
+        {{!-- Pagination --}}
+        {{#if pagination.pages}}
+            <nav class="pagination">
+                {{#if pagination.prev}}
+                    <a class="btn btn--secondary" href="{{page_url pagination.prev}}">← Newer</a>
+                {{/if}}
+                {{#if pagination.next}}
+                    <a class="btn btn--secondary" href="{{page_url pagination.next}}">Older →</a>
+                {{/if}}
+            </nav>
+        {{/if}}
+    </div>
+</section>
+
+{{!-- Category Sections --}}
+{{#get "posts" filter="tag:dating" limit="6" as |tag_posts|}}
+{{#if tag_posts}}
+<section class="section category-section reveal-on-scroll">
+  <div class="container">
+    <div class="category-section__header">
+      <h2>Dating</h2>
+      <a href="/tag/dating/">View all &rarr;</a>
+    </div>
+    <div class="scroll-row">
+      {{#foreach tag_posts}}
+        {{> post-card}}
+      {{/foreach}}
+    </div>
+  </div>
+</section>
+{{/if}}
+{{/get}}
+
+{{#get "posts" filter="tag:cam-sites" limit="6" as |tag_posts|}}
+{{#if tag_posts}}
+<section class="section category-section reveal-on-scroll">
+  <div class="container">
+    <div class="category-section__header">
+      <h2>Cam Sites</h2>
+      <a href="/tag/cam-sites/">View all &rarr;</a>
+    </div>
+    <div class="scroll-row">
+      {{#foreach tag_posts}}
+        {{> post-card}}
+      {{/foreach}}
+    </div>
+  </div>
+</section>
+{{/if}}
+{{/get}}
+
+{{#get "posts" filter="tag:content-platforms" limit="6" as |tag_posts|}}
+{{#if tag_posts}}
+<section class="section category-section reveal-on-scroll">
+  <div class="container">
+    <div class="category-section__header">
+      <h2>Content Platforms</h2>
+      <a href="/tag/content-platforms/">View all &rarr;</a>
+    </div>
+    <div class="scroll-row">
+      {{#foreach tag_posts}}
+        {{> post-card}}
+      {{/foreach}}
+    </div>
+  </div>
+</section>
+{{/if}}
+{{/get}}
+
+{{!-- Newsletter --}}
+<section class="newsletter">
+    <div class="container">
+        {{> newsletter-form}}
+    </div>
+</section>
