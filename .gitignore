@@ -1,0 +1,10 @@
+# environment variables
+.env*
+.env.*
+*.env
+.env
+!.env.example
+
+# Agent related/generated
+docs/superpowers/
+
