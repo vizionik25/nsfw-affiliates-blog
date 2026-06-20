@@ -1,0 +1,33 @@
+{{!< default}}
+
+<header class="tag-header">
+    <div class="container">
+        <h1 class="text-gradient">{{name}}</h1>
+        {{#if description}}
+            <p class="tag-header__description">{{description}}</p>
+        {{/if}}
+        <span class="tag-header__count">{{plural ../pagination.total empty="No posts" singular="% post" plural="% posts"}}</span>
+    </div>
+</header>
+
+<section class="section">
+    <div class="container">
+        <div class="grid grid--posts">
+            {{#foreach posts}}
+                {{> post-card}}
+            {{/foreach}}
+        </div>
+
+        {{#if pagination.pages}}
+            <nav class="pagination">
+                {{#if pagination.prev}}
+                    <a class="pagination__prev" href="{{page_url pagination.prev}}">&larr; Newer Posts</a>
+                {{/if}}
+                <span class="pagination__info">Page {{pagination.page}} of {{pagination.pages}}</span>
+                {{#if pagination.next}}
+                    <a class="pagination__next" href="{{page_url pagination.next}}">Older Posts &rarr;</a>
+                {{/if}}
+            </nav>
+        {{/if}}
+    </div>
+</section>

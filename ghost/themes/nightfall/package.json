@@ -1,0 +1,36 @@
+{
+  "name": "nightfall",
+  "description": "A dark, neon-accented Ghost theme for NSFW affiliate marketing",
+  "version": "1.0.0",
+  "engines": {
+    "ghost": ">=5.0.0"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Nightfall Theme"
+  },
+  "config": {
+    "posts_per_page": 12,
+    "image_sizes": {
+      "xxs": { "width": 30 },
+      "xs": { "width": 100 },
+      "s": { "width": 300 },
+      "m": { "width": 600 },
+      "l": { "width": 1000 },
+      "xl": { "width": 2000 }
+    },
+    "card_assets": true,
+    "custom": {
+      "hero_title": {
+        "type": "text",
+        "default": "Explore. Discover. Indulge.",
+        "description": "Main hero heading on the homepage"
+      },
+      "hero_subtitle": {
+        "type": "text",
+        "default": "Your guide to the best adult entertainment, dating platforms, and more.",
+        "description": "Hero subheading text"
+      }
+    }
+  }
+}
