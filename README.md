@@ -1,4 +1,4 @@
-# Nightfall — NSFW Affiliate Blog
+# NeonLust — NSFW Affiliate Blog
 
 A dark, premium Ghost-powered affiliate blog built for the adult/NSFW niche. Fully containerised with Docker, reverse-proxied through Caddy (auto-HTTPS), and designed for performance, SEO, and monetisation out of the box.
 
@@ -36,7 +36,7 @@ chmod +x bin/setup.sh
 
 ### Path A: Local Development & Theme Preview
 
-Use this mode to run the site locally on your computer for developing, testing, or editing the `nightfall` theme without requiring a domain name, SSL, or mail credentials.
+Use this mode to run the site locally on your computer for developing, testing, or editing the `neonlust` theme without requiring a domain name, SSL, or mail credentials.
 
 #### 1. Configure for Development
 Open the generated `.env` file in the project root and update the environment to:
@@ -44,7 +44,7 @@ Open the generated `.env` file in the project root and update the environment to
 NODE_ENV=development
 SITE_URL=http://localhost:2368
 ```
-*(Setting `NODE_ENV=development` tells Ghost to disable theme caching. Any edits you make to the template files in `ghost/themes/nightfall/` will show up instantly in your browser when you reload the page).*
+*(Setting `NODE_ENV=development` tells Ghost to disable theme caching. Any edits you make to the template files in `ghost/themes/neonlust/` will show up instantly in your browser when you reload the page).*
 
 #### 2. Start the Local Containers
 Spin up only the database and the Ghost application:
@@ -56,7 +56,7 @@ docker compose up -d ghost
 #### 3. Access Your Local Blog
 *   **Homepage:** [http://localhost:2368](http://localhost:2368)
 *   **Admin Panel:** [http://localhost:2368/ghost/](http://localhost:2368/ghost/)
-*   **Activate Theme:** Go to **Settings (⚙️) → Design → Change theme → Advanced** and click **Activate** next to the `nightfall` theme (which is pre-loaded via Docker volume mapping).
+*   **Activate Theme:** Go to **Settings (⚙️) → Design → Change theme → Advanced** and click **Activate** next to the `neonlust` theme (which is pre-loaded via Docker volume mapping).
 
 ---
 
@@ -78,7 +78,7 @@ SITE_URL=https://yourdomain.com
 #### 2. Configure SMTP Mail (Required for Newsletter/Invites)
 Uncomment and fill in SMTP credentials in your `.env` file:
 ```env
-MAIL_FROM="Nightfall Blog <noreply@yourdomain.com>"
+MAIL_FROM="NeonLust Blog <noreply@yourdomain.com>"
 MAIL_HOST=smtp.mailgun.org
 MAIL_PORT=587
 MAIL_SECURE=false
@@ -103,7 +103,7 @@ docker compose up -d
 #### 5. Verification & Live Access
 *   **Status Verification:** Run `docker compose ps` to ensure all 4 services are healthy.
 *   **Admin Setup:** Navigate to `https://yourdomain.com/ghost/` to create your administrator account.
-*   **Activate Theme:** Go to **Settings (⚙️) → Design → Change theme → Advanced** and click **Activate** next to `nightfall`.
+*   **Activate Theme:** Go to **Settings (⚙️) → Design → Change theme → Advanced** and click **Activate** next to the `neonlust` theme.
 
 
 ---
@@ -124,7 +124,7 @@ Fork this repository to your GitHub account.
 *   Find the `ghost-app` Web Service settings in the blueprint deployment and set the `url` environment variable to your target Render URL (e.g., `https://my-blog-name.onrender.com`) or your custom domain name.
 *   Click **Apply**.
 
-Render will automatically spin up the private MySQL service, create a persistent SSD disk (Render Disk), compile the custom `nightfall` theme into the container, and link the Ghost CMS to your database. Access the admin page at `https://your-app.onrender.com/ghost/`.
+Render will automatically spin up the private MySQL service, create a persistent SSD disk (Render Disk), compile the custom `neonlust` theme into the container, and link the Ghost CMS to your database. Access the admin page at `https://your-app.onrender.com/ghost/`.
 
 ---
 
@@ -153,7 +153,7 @@ Vercel will build the frontend statically, pulling posts and themes from your se
 ## 📂 Theme File Structure
 
 ```
-ghost/themes/nightfall/
+ghost/themes/neonlust/
 ├── assets/
 │   ├── css/
 │   │   └── style.css          # Complete stylesheet (variables, components, utilities)

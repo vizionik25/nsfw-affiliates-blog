@@ -1,13 +1,13 @@
 {
-  "name": "nightfall",
-  "description": "A dark, neon-accented Ghost theme for NSFW affiliate marketing",
+  "name": "neonlust",
+  "description": "A dark, premium Ghost theme for NeonLust - adult lifestyle blog",
   "version": "1.0.0",
   "engines": {
     "ghost": ">=5.0.0"
   },
   "license": "MIT",
   "author": {
-    "name": "Nightfall Theme",
+    "name": "NeonLust Theme",
     "email": "theme-support@yourdomain.com"
   },
   "keywords": [

@@ -58,11 +58,11 @@ mkdir -p backups
 echo "Created ./backups directory."
 
 # Make sure permissions on theme are readable and traversable by container (node user UID 1000)
-if [ -d "ghost/themes/nightfall" ]; then
-  chmod -R o+rX ghost/themes/nightfall
+if [ -d "ghost/themes/neonlust" ]; then
+  chmod -R o+rX ghost/themes/neonlust
   echo "Adjusted permissions on theme files to be container-readable."
 else
-  echo "Warning: ghost/themes/nightfall directory not found. Skipping permissions adjustment."
+  echo "Warning: ghost/themes/neonlust directory not found. Skipping permissions adjustment."
 fi
 
 echo "Setup complete. Please verify or update additional values in your .env file."
