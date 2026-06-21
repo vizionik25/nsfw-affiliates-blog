@@ -21,58 +21,90 @@ A dark, premium Ghost-powered affiliate blog built for the adult/NSFW niche. Ful
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 1. Clone & Initialize
 
-- [Docker](https://docs.docker.com/get-docker/) & Docker Compose v2+
-- A domain name pointed at your server (for automatic HTTPS via Caddy)
-- Git
-
-### 1. Clone the Repository
+First, clone the repository and run the automated setup script to generate secure environment configurations and fix permissions:
 
 ```bash
 git clone https://github.com/your-org/NSFW-Aff-Blog.git
 cd NSFW-Aff-Blog
-```
-
-### 2. Run Setup Script
-
-Run the automated setup script to copy `.env.example` to `.env`, generate secure random database passwords, create the backups folder, and configure directory permissions:
-
-```bash
 chmod +x bin/setup.sh
 ./bin/setup.sh
 ```
 
-Open the newly created `.env` file and set the following variables:
+---
 
-| Variable | Description | Default |
-|---|---|---|
-| `SITE_URL` | Public URL of your site (e.g. `https://yourdomain.com`) | `https://yourdomain.com` |
-| `MAIL_*` | SMTP credentials for Ghost email delivery (e.g. Mailgun) | (Defaults) |
+### Path A: Local Development & Theme Preview
 
-### 3. Edit the Caddyfile
+Use this mode to run the site locally on your computer for developing, testing, or editing the `nightfall` theme without requiring a domain name, SSL, or mail credentials.
 
-Open `caddy/Caddyfile` and replace the placeholder domain with your own:
-
+#### 1. Configure for Development
+Open the generated `.env` file in the project root and update the environment to:
+```env
+NODE_ENV=development
+SITE_URL=http://localhost:2368
 ```
+*(Setting `NODE_ENV=development` tells Ghost to disable theme caching. Any edits you make to the template files in `ghost/themes/nightfall/` will show up instantly in your browser when you reload the page).*
+
+#### 2. Start the Local Containers
+Spin up only the database and the Ghost application:
+```bash
+docker compose up -d ghost
+```
+*(Caddy and the backup daemon are automatically skipped as they are not needed for localhost development).*
+
+#### 3. Access Your Local Blog
+*   **Homepage:** [http://localhost:2368](http://localhost:2368)
+*   **Admin Panel:** [http://localhost:2368/ghost/](http://localhost:2368/ghost/)
+*   **Activate Theme:** Go to **Settings (⚙️) → Design → Change theme → Advanced** and click **Activate** next to the `nightfall` theme (which is pre-loaded via Docker volume mapping).
+
+---
+
+### Path B: Production Deployment (Locally-Hosted or VPS)
+
+Use this mode to deploy a live, hardened production blog on a public server (VPS) with automated daily backups, transactional email memberships, and automatic Let's Encrypt HTTPS via Caddy.
+
+#### Prerequisites
+*   A domain name pointed at your server's public IP address.
+*   Ports `80` and `443` open in your server's firewall.
+
+#### 1. Configure the Production URL
+Open your `.env` file and set the canonical URL of your site:
+```env
+NODE_ENV=production
+SITE_URL=https://yourdomain.com
+```
+
+#### 2. Configure SMTP Mail (Required for Newsletter/Invites)
+Uncomment and fill in SMTP credentials in your `.env` file:
+```env
+MAIL_FROM="Nightfall Blog <noreply@yourdomain.com>"
+MAIL_HOST=smtp.mailgun.org
+MAIL_PORT=587
+MAIL_SECURE=false
+MAIL_USER=postmaster@yourdomain.com
+MAIL_PASS=your_smtp_password_here
+```
+
+#### 3. Update Caddyfile Domain
+Open `Caddyfile` and replace the placeholder domain on the first line with your live domain:
+```caddy
 yourdomain.com {
-    reverse_proxy ghost:2368
+    ...
 }
 ```
 
-### 4. Launch
-
+#### 4. Launch the Production Stack
+Start all services (Ghost, MySQL, Caddy proxy, and Backup Cron daemon):
 ```bash
 docker compose up -d
 ```
 
-### 5. Ghost Admin Setup
+#### 5. Verification & Live Access
+*   **Status Verification:** Run `docker compose ps` to ensure all 4 services are healthy.
+*   **Admin Setup:** Navigate to `https://yourdomain.com/ghost/` to create your administrator account.
+*   **Activate Theme:** Go to **Settings (⚙️) → Design → Change theme → Advanced** and click **Activate** next to `nightfall`.
 
-1. Navigate to `https://yourdomain.com/ghost/`
-2. Create your admin account
-3. Go to **Settings → Design → Change theme → Upload theme**
-4. Upload the `nightfall` theme ZIP from `ghost/themes/nightfall/`
-5. Activate the theme
 
 ---
 

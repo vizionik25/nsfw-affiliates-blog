@@ -31,6 +31,9 @@ services:
     restart: unless-stopped
     expose:
       - "2368"
+    ports:
+      # Bind to localhost only (useful for local development/theme preview)
+      - "127.0.0.1:2368:2368"
     volumes:
       - ghost_content:/var/lib/ghost/content
       - ./ghost/themes/nightfall:/var/lib/ghost/content/themes/nightfall:ro
