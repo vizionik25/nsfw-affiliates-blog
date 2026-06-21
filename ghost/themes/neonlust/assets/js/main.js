@@ -1,5 +1,5 @@
 /**
- * Nightfall Theme — Main JavaScript
+ * NeonLust Theme — Main JavaScript
  * Vanilla ES6+, no dependencies.
  */
 (function () {
