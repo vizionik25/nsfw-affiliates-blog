@@ -48,7 +48,7 @@ services:
       NODE_ENV: ${NODE_ENV:-production}
       # SMTP Mail Configuration
       mail__transport: SMTP
-      mail__from: ${MAIL_FROM:-\"NeonLust Blog <noreply@yourdomain.com>\"}
+      mail__from: ${MAIL_FROM:-"NeonLust Blog <noreply@yourdomain.com>"}
       mail__options__host: ${MAIL_HOST:-smtp.mailgun.org}
       mail__options__port: ${MAIL_PORT:-587}
       mail__options__secure: ${MAIL_SECURE:-false}
