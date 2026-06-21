@@ -108,6 +108,48 @@ docker compose up -d
 
 ---
 
+### Path C: Render Cloud Deployment (1-Click Blueprint)
+
+Use this option to deploy the entire stack (Ghost CMS + MySQL 8 + Disk persistence) on the Render hosting platform.
+
+#### 1. Fork the Repository
+Fork this repository to your GitHub account.
+
+#### 2. Create Blueprint on Render
+*   Go to your **Render Dashboard** and click **New > Blueprint Instance**.
+*   Select your forked repository and click **Connect**.
+
+#### 3. Configure Properties
+*   Give your Blueprint Group a name.
+*   Find the `ghost-app` Web Service settings in the blueprint deployment and set the `url` environment variable to your target Render URL (e.g., `https://my-blog-name.onrender.com`) or your custom domain name.
+*   Click **Apply**.
+
+Render will automatically spin up the private MySQL service, create a persistent SSD disk (Render Disk), compile the custom `nightfall` theme into the container, and link the Ghost CMS to your database. Access the admin page at `https://your-app.onrender.com/ghost/`.
+
+---
+
+### Path D: Headless Vercel Deployment (Jamstack Frontend)
+
+Since Vercel is a serverless platform, it cannot host the stateful Ghost CMS backend directly. Instead, you host the Ghost CMS backend on a server/VPS (Path B) or Render (Path C), and deploy a static or Next.js frontend to Vercel that queries the content from your Ghost API.
+
+#### 1. Setup Ghost Content API
+*   Log into your self-hosted Ghost Admin panel (`https://yourdomain.com/ghost/`).
+*   Go to **Settings (⚙️) → Integrations** and click **Add custom integration**.
+*   Name it "Vercel Frontend".
+*   Copy the **API URL** and the **Content API Key**.
+
+#### 2. Deploy Frontend to Vercel
+*   Deploy a Next.js frontend (such as the official [Next.js + Ghost starter template](https://github.com/vercel/next.js/tree/canary/examples/cms-ghost)).
+*   Set the following environment variables in your Vercel Project Settings:
+    *   `GHOST_API_URL` — Your copied Ghost API URL (e.g. `https://yourdomain.com`).
+    *   `GHOST_API_KEY` — Your copied Content API Key.
+
+Vercel will build the frontend statically, pulling posts and themes from your self-hosted backend. Set up rebuild webhooks in Ghost to trigger new Vercel builds whenever content changes.
+
+
+---
+
+
 ## 📂 Theme File Structure
 
 ```
