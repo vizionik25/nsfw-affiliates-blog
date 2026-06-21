@@ -1,15 +1,27 @@
 {{!< default}}
 
+{{#post}}
 {{!-- Template: Static Page (About, Privacy, Terms) --}}
 
+{{#match @page.show_title_and_feature_image}}
 <header class="post-header">
     <div class="container container--narrow">
         <h1 class="post-header__title">{{title}}</h1>
+        {{#if feature_image}}
+            <figure class="post-header__image">
+                <img src="{{feature_image}}" alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}" />
+                {{#if feature_image_caption}}
+                    <figcaption>{{feature_image_caption}}</figcaption>
+                {{/if}}
+            </figure>
+        {{/if}}
     </div>
 </header>
+{{/match}}
 
 <div class="container container--narrow">
     <article class="post-content">
         {{content}}
     </article>
 </div>
+{{/post}}
