@@ -3,7 +3,7 @@
 {{#post}}
 {{!-- Template: Static Page (About, Privacy, Terms) --}}
 
-{{#match @page.show_title_and_feature_image}}
+{{#if @page.show_title_and_feature_image}}
 <header class="post-header">
     <div class="container container--narrow">
         <h1 class="post-header__title">{{title}}</h1>
@@ -17,7 +17,7 @@
         {{/if}}
     </div>
 </header>
-{{/match}}
+{{/if}}
 
 <div class="container container--narrow">
     <article class="post-content">
