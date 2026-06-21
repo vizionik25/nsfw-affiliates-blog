@@ -104,7 +104,7 @@ services:
         max-file: "3"
 
   backup:
-    image: alpine:3.19.1
+    image: mariadb:10.11-alpine
     restart: unless-stopped
     volumes:
       - ghost_content:/backup/ghost_content:ro
@@ -119,8 +119,7 @@ services:
         condition: service_healthy
     command: >
       sh -c "
-      apk add --no-cache mariadb-client tar &&
-      echo 'echo \"Starting daily backup...\" && mysqldump -h \"$$MYSQL_HOST\" -u \"$$MYSQL_USER\" -p\"$$MYSQL_PASSWORD\" \"$$MYSQL_DATABASE\" | gzip > /backups/db_backup_\$(date +%F).sql.gz && tar -czf /backups/ghost_content_\$(date +%F).tar.gz -C /backup/ghost_content . && find /backups -maxdepth 1 -mtime +7 -type f \\( -name \"db_backup_*\" -o -name \"ghost_content_*\" \\) -delete && echo \"Backup complete.\"' > /etc/periodic/daily/backup &&
+      echo 'echo \"Starting daily backup...\" && mariadb-dump -h \"$$MYSQL_HOST\" -u \"$$MYSQL_USER\" -p\"$$MYSQL_PASSWORD\" \"$$MYSQL_DATABASE\" | gzip > /backups/db_backup_\$(date +%F).sql.gz && tar -czf /backups/ghost_content_\$(date +%F).tar.gz -C /backup/ghost_content . && find /backups -maxdepth 1 -mtime +7 -type f \\( -name \"db_backup_*\" -o -name \"ghost_content_*\" \\) -delete && echo \"Backup complete.\"' > /etc/periodic/daily/backup &&
       chmod +x /etc/periodic/daily/backup &&
       exec crond -f -l 2
       "
