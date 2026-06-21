@@ -103,7 +103,7 @@ docker compose up -d
 #### 5. Verification & Live Access
 *   **Status Verification:** Run `docker compose ps` to ensure all 4 services are healthy.
 *   **Admin Setup:** Navigate to `https://yourdomain.com/ghost/` to create your administrator account.
-*   **Activate Theme:** Go to **Settings (⚙️) → Design → Change theme → Advanced** and click **Activate** next to `neonlust`.
+*   **Activate Theme:** Go to **Settings (⚙️) → Design → Change theme → Advanced** and click **Activate** next to the `neonlust` theme.
 
 
 ---
