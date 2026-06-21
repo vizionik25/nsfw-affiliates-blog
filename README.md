@@ -34,21 +34,21 @@ git clone https://github.com/your-org/NSFW-Aff-Blog.git
 cd NSFW-Aff-Blog
 ```
 
-### 2. Configure Environment Variables
+### 2. Run Setup Script
 
-Copy the example env file and fill in your values:
+Run the automated setup script to copy `.env.example` to `.env`, generate secure random database passwords, create the backups folder, and configure directory permissions:
 
 ```bash
-cp .env.example .env
+chmod +x bin/setup.sh
+./bin/setup.sh
 ```
 
-Key variables to set:
+Open the newly created `.env` file and set the following variables:
 
-| Variable | Description |
-|---|---|
-| `GHOST_URL` | Public URL of your site (e.g. `https://yourdomain.com`) |
-| `GHOST_DB_PASSWORD` | MySQL root password |
-| `GHOST_MAIL_*` | SMTP credentials for transactional email |
+| Variable | Description | Default |
+|---|---|---|
+| `SITE_URL` | Public URL of your site (e.g. `https://yourdomain.com`) | `https://yourdomain.com` |
+| `MAIL_*` | SMTP credentials for Ghost email delivery (e.g. Mailgun) | (Defaults) |
 
 ### 3. Edit the Caddyfile
 
@@ -237,6 +237,37 @@ All ad slots are hidden by default and appear only when they contain content, pr
 - **Lazy-loaded Images** — Native `loading="lazy"` on below-fold images
 - **Minimal Render-blocking** — No external framework CSS/JS to delay First Contentful Paint
 - **Meta Descriptions** — Pulled from Ghost's built-in excerpt or custom excerpt field
+
+---
+
+## 💾 Backups & Disaster Recovery
+
+The project contains an automated `backup` container running an Alpine cron job. It performs a daily database dump and files archive, placing them in the `./backups` directory on the host (with a 7-day retention policy).
+
+### Backup Files Created Daily
+- `backups/db_backup_YYYY-MM-DD.sql.gz` — Compressed MySQL database dump
+- `backups/ghost_content_YYYY-MM-DD.tar.gz` — Tarball of the `/var/lib/ghost/content` directory (images, settings, themes)
+
+### Manual Backup Trigger
+You can force a backup at any time by running:
+```bash
+docker compose exec backup /etc/periodic/daily/backup
+```
+
+### Restoration Procedure
+
+#### 1. Restore Database
+Run the following command to restore a database backup:
+```bash
+gunzip < backups/db_backup_YYYY-MM-DD.sql.gz | docker compose exec -T db sh -c 'exec mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"'
+```
+
+#### 2. Restore Files
+Run the following to extract backup assets back into the Ghost content volume:
+```bash
+docker run --rm -v ghost-self-hosted_ghost_content:/var/lib/ghost/content -v $(pwd)/backups:/backup alpine tar -xzf /backup/ghost_content_YYYY-MM-DD.tar.gz -C /var/lib/ghost/content
+```
+*Note: If you renamed your project directory, your volume prefix might differ. You can list all docker volumes to find the exact name by running `docker volume ls`.*
 
 ---
 

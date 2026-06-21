@@ -1,23 +1,41 @@
 yourdomain.com {
-    encode gzip
+    # Enable Gzip and Zstandard compression for modern browsers
+    encode gzip zstd
 
+    # Hardened security headers
     header {
+        # Prevent browsers from MIME-sniffing response content types
         X-Content-Type-Options "nosniff"
+        # Prevent clickjacking attacks by forbidding iframe embedding
         X-Frame-Options "DENY"
+        # Protect referrer privacy across origins
         Referrer-Policy "strict-origin-when-cross-origin"
+        # Restrict browser feature permissions (disable unused features)
         Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        # Force HTTPS connection (max-age is 1 year). Use preload with caution.
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-        X-XSS-Protection "1; mode=block"
+        # Disable obsolete/unsafe XSS auditor in modern browsers
+        X-XSS-Protection "0"
     }
 
+    # Serve robots.txt directly from Caddy
     handle /robots.txt {
+        header Content-Type "text/plain; charset=utf-8"
         respond "User-agent: *
 Allow: /
 Disallow: /ghost/
 Disallow: /p/
 
-Sitemap: https://yourdomain.com/sitemap.xml" 200
+Sitemap: https://{host}/sitemap.xml" 200
     }
 
-    reverse_proxy ghost:2368
+    # Limit client request body size to 20MB (e.g. for image/theme uploads)
+    request_body {
+        max_size 20971520
+    }
+
+    # Fallback: Proxy all other traffic to the Ghost container
+    handle {
+        reverse_proxy ghost:2368
+    }
 }

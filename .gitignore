@@ -7,4 +7,5 @@
 
 # Agent related/generated
 docs/superpowers/
+.worktrees/
 

@@ -1,8 +1,6 @@
-version: "3.8"
-
 services:
   caddy:
-    image: caddy:2-alpine
+    image: caddy:2.7-alpine
     restart: unless-stopped
     ports:
       - "80:80"
@@ -13,9 +11,20 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - ghost
+      ghost:
+        condition: service_healthy
     networks:
-      - blog_network
+      - frontend_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   ghost:
     image: ghost:5-alpine
@@ -28,36 +37,104 @@ services:
     environment:
       url: ${SITE_URL:-https://yourdomain.com}
       database__client: mysql
-      database__connection__host: db
+      database__connection__host: ${MYSQL_HOST:-db}
       database__connection__port: 3306
-      database__connection__database: ghost
-      database__connection__user: ghost
-      database__connection__password: ${MYSQL_PASSWORD:-change_me_ghost_password_here}
-      NODE_ENV: production
+      database__connection__database: ${MYSQL_DATABASE:-ghost}
+      database__connection__user: ${MYSQL_USER:-ghost}
+      database__connection__password: ${MYSQL_PASSWORD}
+      NODE_ENV: ${NODE_ENV:-production}
+      # SMTP Mail Configuration
+      mail__transport: SMTP
+      mail__from: ${MAIL_FROM:-"Nightfall Blog <noreply@yourdomain.com>"}
+      mail__options__host: ${MAIL_HOST:-smtp.mailgun.org}
+      mail__options__port: ${MAIL_PORT:-587}
+      mail__options__secure: ${MAIL_SECURE:-false}
+      mail__options__auth__user: ${MAIL_USER}
+      mail__options__auth__pass: ${MAIL_PASS}
     depends_on:
       db:
         condition: service_healthy
     networks:
-      - blog_network
+      - frontend_network
+      - backend_network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:2368/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   db:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-change_me_root_password_here}
-      MYSQL_DATABASE: ghost
-      MYSQL_USER: ghost
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-change_me_ghost_password_here}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ghost}
+      MYSQL_USER: ${MYSQL_USER:-ghost}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-change_me_root_password_here}"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 30s
     networks:
-      - blog_network
+      - backend_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  backup:
+    image: mariadb:10.11-alpine
+    restart: unless-stopped
+    volumes:
+      - ghost_content:/backup/ghost_content:ro
+      - ./backups:/backups
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST:-db}
+      MYSQL_USER: ${MYSQL_USER:-ghost}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ghost}
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "
+      echo 'echo \"Starting daily backup...\" && mariadb-dump -h \"$$MYSQL_HOST\" -u \"$$MYSQL_USER\" -p\"$$MYSQL_PASSWORD\" \"$$MYSQL_DATABASE\" | gzip > /backups/db_backup_\$(date +%F).sql.gz && tar -czf /backups/ghost_content_\$(date +%F).tar.gz -C /backup/ghost_content . && find /backups -maxdepth 1 -mtime +7 -type f \\( -name \"db_backup_*\" -o -name \"ghost_content_*\" \\) -delete && echo \"Backup complete.\"' > /etc/periodic/daily/backup &&
+      chmod +x /etc/periodic/daily/backup &&
+      exec crond -f -l 2
+      "
+    networks:
+      - backend_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   caddy_data:
@@ -66,5 +143,7 @@ volumes:
   mysql_data:
 
 networks:
-  blog_network:
+  frontend_network:
+    driver: bridge
+  backend_network:
     driver: bridge
