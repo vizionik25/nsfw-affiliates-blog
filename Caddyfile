@@ -1,4 +1,4 @@
-yourdomain.com {
+:80 {
     # Enable Gzip and Zstandard compression for modern browsers
     encode gzip zstd
 
@@ -12,7 +12,7 @@ yourdomain.com {
         Referrer-Policy "strict-origin-when-cross-origin"
         # Restrict browser feature permissions (disable unused features)
         Permissions-Policy "camera=(), microphone=(), geolocation=()"
-        # Force HTTPS connection (max-age is 1 year). Use preload with caution.
+        # Force HTTPS connection (max-age is 1 year). Traefik handles TLS termination.
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         # Disable obsolete/unsafe XSS auditor in modern browsers
         X-XSS-Protection "0"
@@ -26,7 +26,7 @@ Allow: /
 Disallow: /ghost/
 Disallow: /p/
 
-Sitemap: https://{host}/sitemap.xml" 200
+Sitemap: https://nsfw-blog.linksheild.my/sitemap.xml" 200
     }
 
     # Limit client request body size to 20MB (e.g. for image/theme uploads)

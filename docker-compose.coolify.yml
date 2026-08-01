@@ -1,0 +1,115 @@
+services:
+  caddy:
+    image: caddy:2.7-alpine
+    restart: unless-stopped
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      ghost:
+        condition: service_healthy
+    networks:
+      - coolify
+      - frontend_network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.ghost-blog.rule=Host(`nsfw-blog.linksheild.my`)
+      - traefik.http.routers.ghost-blog.entrypoints=https
+      - traefik.http.routers.ghost-blog.tls=true
+      - traefik.http.routers.ghost-blog.tls.certresolver=letsencrypt
+      - traefik.http.services.ghost-blog.loadbalancer.server.port=80
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  ghost:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    expose:
+      - "2368"
+    volumes:
+      - ghost_content:/var/lib/ghost/content
+    environment:
+      url: https://nsfw-blog.linksheild.my
+      database__client: mysql
+      database__connection__host: db
+      database__connection__port: 3306
+      database__connection__database: ${MYSQL_DATABASE:-ghost}
+      database__connection__user: ${MYSQL_USER:-ghost}
+      database__connection__password: ${MYSQL_PASSWORD}
+      NODE_ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - frontend_network
+      - backend_network
+    healthcheck:
+      test: ["CMD", "sh", "-c", "nc -z localhost 2368"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ghost}
+      MYSQL_USER: ${MYSQL_USER:-ghost}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - backend_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  caddy_data:
+  caddy_config:
+  ghost_content:
+  mysql_data:
+
+networks:
+  coolify:
+    external: true
+  frontend_network:
+    driver: bridge
+  backend_network:
+    driver: bridge
