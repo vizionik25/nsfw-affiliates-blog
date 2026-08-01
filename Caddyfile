@@ -36,6 +36,8 @@ Sitemap: https://nsfw-blog.linksheild.my/sitemap.xml" 200
 
     # Fallback: Proxy all other traffic to the Ghost container
     handle {
-        reverse_proxy ghost:2368
+        reverse_proxy ghost:2368 {
+            header_up X-Forwarded-Proto https
+        }
     }
 }
