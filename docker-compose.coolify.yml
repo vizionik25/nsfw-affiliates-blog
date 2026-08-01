@@ -1,9 +1,10 @@
 services:
   caddy:
-    image: caddy:2.7-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
     restart: unless-stopped
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
